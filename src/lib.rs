@@ -65,7 +65,7 @@ impl Plugin for BedrockBridge {
         }
     }
 
-    fn on_load(&self, context: &Context) -> Result<(), String> {
+    fn on_load(&self, context: Context) -> Result<(), String> {
         let dir = context.get_data_folder();
         let cfg = config::Config::load(&dir).map_err(|e| e.to_string())?;
         let ids = config::load_java_ids(&dir, &cfg).map_err(|e| e.to_string())?;
@@ -86,9 +86,9 @@ impl Plugin for BedrockBridge {
         Ok(())
     }
 
-    fn on_unload(&self, _context: &Context) -> Result<(), String> {
+    fn on_unload(&self, _context: Context) -> Result<(), String> {
         if let Some(task) = TASK.with(Cell::take) {
-            let _ = scheduler::cancel_task(task);
+            scheduler::cancel_task(task);
         }
         if let Some(mut bridge) = BRIDGE.with(|b| b.borrow_mut().take()) {
             bridge.shutdown();
