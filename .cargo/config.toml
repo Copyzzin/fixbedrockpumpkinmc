@@ -1,0 +1,6 @@
+[build]
+target = "wasm32-wasip2"
+
+# Optional: run unit tests inside Wasmtime (cargo test).
+# [target.wasm32-wasip2]
+# runner = "wasmtime -S inherit-network"

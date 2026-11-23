@@ -1,0 +1,31 @@
+# bedrock-bridge — copy to <pumpkin>/plugins/data/bedrock-bridge/config.toml
+# The plugin refuses to start while any REQUIRED value is unset.
+
+[bedrock]
+bind_address = "0.0.0.0:19132"      # UDP. Pumpkin's own Bedrock listener must be OFF (bedrock_edition = false).
+motd = "Pumpkin"
+sub_motd = "bedrock-bridge"
+max_players = 100
+protocol = 0                         # REQUIRED: Bedrock protocol number of the client build you support.
+game_version = ""                    # shown in the server list, e.g. the Bedrock version string.
+max_mtu = 1400
+compression_threshold = 256
+
+[java]
+address = "127.0.0.1:25565"          # Pumpkin's Java listener (IPv4 literal).
+protocol_version = 0                 # REQUIRED: "protocol_version" from the server's version.json.
+packets_json = "java_packets.json"   # vanilla data generator output (reports/packets.json), see README.
+forwarding_secret = ""               # REQUIRED: same value as [proxy.velocity] secret in Pumpkin.
+
+[auth]
+mode = "online"                      # "online" verifies the Xbox identity chain. "offline" = anyone can impersonate anyone.
+mojang_root_public_keys = []         # REQUIRED in online mode: base64 DER (SPKI) root key(s), see README.
+encryption = true                    # must stay true in online mode.
+username_prefix = "."                # Java name prefix for Bedrock players. Use "_" if Pumpkin rejects ".".
+
+[limits]
+max_sessions = 64
+max_sessions_per_ip = 4
+max_batch_bytes = 4194304
+max_queued_bytes_per_session = 8388608
+login_timeout_secs = 30

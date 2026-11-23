@@ -1,0 +1,33 @@
+# Settings to apply in YOUR Pumpkin server configuration so bedrock-bridge can take over Bedrock.
+# Key names follow the Pumpkin docs consulted when this plugin was written; Pumpkin's config is
+# still evolving, so confirm them against the docs of the build you run before relying on them.
+
+# 1) Turn OFF Pumpkin's built-in Bedrock listener, otherwise it keeps UDP 19132 and the plugin
+#    cannot bind it.
+bedrock_edition = false
+
+# 2) Velocity modern forwarding: how the bridge tells Pumpkin who the (already authenticated)
+#    Bedrock player is. The secret must be identical to `java.forwarding_secret` in
+#    plugins/data/bedrock-bridge/config.toml. Generate a long random one, e.g.:
+#        openssl rand -base64 32
+[proxy]
+enabled = true
+
+[proxy.velocity]
+enabled = true
+secret = "CHANGE-ME-TO-A-LONG-RANDOM-SECRET"
+
+# NOTE: with forwarding enabled Pumpkin rejects direct Java logins. Java players must connect
+# through a proxy such as Velocity, or Pumpkin's Java port must only be reachable by the bridge.
+# Do not expose the Java port publicly while forwarding is on.
+
+# 3) Plugin permissions. Grant bedrock-bridge exactly these, using your Pumpkin version's plugin
+#    permission mechanism (see docs.pumpkinmc.org, plugin development section):
+#      fs.read.data
+#      fs.write.data
+#      network.udp
+#      network.udp.bind
+#      network.udp.outgoing_datagram
+#      network.tcp
+#      network.tcp.connect
+#    Do NOT grant more (no DNS, HTTP, environment or loopback-only restrictions are needed).

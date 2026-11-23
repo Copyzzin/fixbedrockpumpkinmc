@@ -1,0 +1,40 @@
+[package]
+name = "bedrock-bridge"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "Geyser-style Bedrock Edition to Java Edition protocol bridge for the Pumpkin server (WASM plugin)"
+license = "MIT OR Apache-2.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# Plugin API (WIT bindings). Pinned exactly: it is 0.x, its version encodes the Minecraft versions it targets
+# (0.2.1+26.3-26.51), and it must match your Pumpkin server build.
+pumpkin-plugin-api = "=0.2.1"
+tracing = "0.1"
+
+# Raw WASI 0.2 sockets: non-blocking UDP (RakNet) and TCP (Java link) + secure randomness.
+wasi = "0.14"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Crypto: Bedrock login chain (ES384), ECDH + AES-256-CTR, Velocity forwarding (HMAC-SHA256).
+base64 = "0.22"
+sha2 = "0.10"
+hmac = "0.12"
+aes = "0.8"
+ctr = "0.9"
+p384 = { version = "0.13", default-features = false, features = ["arithmetic", "ecdsa", "ecdh", "pkcs8", "std"] }
+
+# Pure-Rust deflate (raw for Bedrock, zlib for Java).
+miniz_oxide = "0.8"
+
+[profile.release]
+lto = true
+opt-level = "s"
+codegen-units = 1
+strip = true
